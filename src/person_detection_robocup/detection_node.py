@@ -84,7 +84,7 @@ class CameraProcessingNode:
         self.cv_bridge = CvBridge()
 
         # Synchronize topics
-        ts = message_filters.TimeSynchronizer([image_sub, depth_sub, info_sub], 10)
+        ts = message_filters.TimeSynchronizer([image_sub, depth_sub, info_sub], 1)
         ts.registerCallback(self.callback)
 
         # Publisher for PoseArray
@@ -106,6 +106,8 @@ class CameraProcessingNode:
         rospy.loginfo(msg=f"Reconfigured {config}")
         self.config = config
         self.model.iknn_threshold = config.iknn_threshold
+        self.model.bk_num = config.bk_num
+        self.model.use_bk_alpha = config.use_bk_alpha
         self.enable_debug = config.publish_detection_image
         self.enable_people = config.publish_people
         self.enable_poses = config.publish_pose
